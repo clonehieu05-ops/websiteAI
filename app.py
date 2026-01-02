@@ -41,8 +41,8 @@ CORS(app)
 
 # reCAPTCHA configuration (Google reCAPTCHA v2)
 # Get your keys at: https://www.google.com/recaptcha/admin
-RECAPTCHA_SITE_KEY = os.getenv('RECAPTCHA_SITE_KEY', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI')  # Test key
-RECAPTCHA_SECRET_KEY = os.getenv('RECAPTCHA_SECRET_KEY', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe')  # Test key
+RECAPTCHA_SITE_KEY = os.getenv('RECAPTCHA_SITE_KEY', '6LeIcT4sAAAAAMrLcwb6ya9VMyCJX_Slf3DoHbd8')  # Test key
+RECAPTCHA_SECRET_KEY = os.getenv('RECAPTCHA_SECRET_KEY', '6LeIcT4sAAAAAOEexKqHDncTMeqs2hmW9cgzOuIf')  # Test key
 
 # Configuration
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY', 'dev-secret-key-change-in-production')
@@ -814,3 +814,4 @@ def download_file(filename):
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
+
