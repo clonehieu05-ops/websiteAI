@@ -36,8 +36,13 @@ from gradio_client import Client, handle_file
 # APP CONFIGURATION
 # ============================================================================
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+app = Flask(__name__, static_folder='static')
 CORS(app)
+
+# reCAPTCHA configuration (Google reCAPTCHA v2)
+# Get your keys at: https://www.google.com/recaptcha/admin
+RECAPTCHA_SITE_KEY = os.getenv('RECAPTCHA_SITE_KEY', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI')  # Test key
+RECAPTCHA_SECRET_KEY = os.getenv('RECAPTCHA_SECRET_KEY', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe')  # Test key
 
 # Configuration
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY', 'dev-secret-key-change-in-production')
@@ -422,15 +427,55 @@ def index():
     """Serve main page."""
     return send_from_directory('static', 'index.html')
 
+@app.route('/api/recaptcha-key', methods=['GET'])
+def get_recaptcha_key():
+    """Return reCAPTCHA site key for frontend."""
+    return jsonify({"siteKey": RECAPTCHA_SITE_KEY})
+
+def verify_recaptcha(token):
+    """Verify reCAPTCHA token with Google."""
+    if not token:
+        return False
+    try:
+        response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': RECAPTCHA_SECRET_KEY,
+                'response': token
+            },
+            timeout=5
+        )
+        result = response.json()
+        return result.get('success', False)
+    except:
+        return False
+
+def is_valid_email(email):
+    """Check if email is a valid Gmail address."""
+    if not email:
+        return False
+    email = email.lower().strip()
+    # Only allow @gmail.com addresses
+    return email.endswith('@gmail.com')
+
 @app.route('/api/auth/register', methods=['POST'])
 def register():
     """Register new user."""
     data = request.json
     email = data.get('email', '').strip().lower()
     password = data.get('password', '')
+    captcha_token = data.get('captchaToken', '')
+    
+    # Verify reCAPTCHA
+    if not verify_recaptcha(captcha_token):
+        return jsonify({"error": "Please complete the CAPTCHA verification"}), 400
     
     if not email or not password:
         return jsonify({"error": "Email and password required"}), 400
+    
+    # Check for Gmail only
+    if not is_valid_email(email):
+        return jsonify({"error": "Only @gmail.com email addresses are allowed"}), 400
     
     if len(password) < 6:
         return jsonify({"error": "Password must be at least 6 characters"}), 400
@@ -454,6 +499,11 @@ def login():
     data = request.json
     email = data.get('email', '').strip().lower()
     password = data.get('password', '')
+    captcha_token = data.get('captchaToken', '')
+    
+    # Verify reCAPTCHA
+    if not verify_recaptcha(captcha_token):
+        return jsonify({"error": "Please complete the CAPTCHA verification"}), 400
     
     conn = get_db()
     user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
