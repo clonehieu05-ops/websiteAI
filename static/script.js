@@ -12,7 +12,7 @@ let authToken = localStorage.getItem('authToken');
 let currentUser = null;
 let loginCaptchaId = null;
 let registerCaptchaId = null;
-const SITE_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'; // Test Key
+const SITE_KEY = '6LfIWD4sAAAAAAl15qeamLLcRvljmTvpbFPQfNU7'; // Test Key
 
 // ============================================
 // Utility Functions
@@ -825,3 +825,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
