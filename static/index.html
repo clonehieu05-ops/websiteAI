@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beast AI Gen - All In One</title>
-    <meta name="description"
-        content="AI-powered dashboard for image/video generation, virtual try-on, and creative content creation">
+    <title>AI Hub Total - Revolutionize Your Workflow</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -15,307 +13,476 @@
 </head>
 
 <body>
+    <!-- Background Effects -->
+    <div class="bg-effects">
+        <div class="bg-gradient"></div>
+        <div class="bg-grid"></div>
+        <div class="bg-glow glow-1"></div>
+        <div class="bg-glow glow-2"></div>
+        <div class="bg-glow glow-3"></div>
+    </div>
+
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h1 class="logo">🤖 Beast AI Gen</h1>
+            <div class="logo">
+                <div class="logo-icon">AI</div>
+                <span class="logo-text">AI Hub Total</span>
+            </div>
         </div>
 
-        <!-- Auth Section -->
-        <div class="auth-section" id="authSection">
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="login">Login</button>
-                <button class="tab-btn" data-tab="register">Register</button>
-            </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="dashboard">
+                <span class="nav-icon">🏠</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-section="generate">
+                <span class="nav-icon">🖼️</span>
+                <span>Image Gen</span>
+            </a>
+            <a href="#" class="nav-item" data-section="prompt-image">
+                <span class="nav-icon">📝</span>
+                <span>Prompt Image</span>
+            </a>
+            <a href="#" class="nav-item" data-section="prompt-video">
+                <span class="nav-icon">🎬</span>
+                <span>Prompt Video</span>
+            </a>
+            <a href="#" class="nav-item" data-section="landing">
+                <span class="nav-icon">🌐</span>
+                <span>Landing Page</span>
+            </a>
+            <a href="#" class="nav-item" data-section="tryon">
+                <span class="nav-icon">👔</span>
+                <span>Virtual Try-On</span>
+            </a>
+            <a href="#" class="nav-item" data-section="video">
+                <span class="nav-icon">🎥</span>
+                <span>Video Gen</span>
+            </a>
+        </nav>
 
-            <form id="loginForm" class="auth-form">
-                <input type="email" id="loginEmail" placeholder="Email" required>
-                <input type="password" id="loginPassword" placeholder="Password" required>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
-
-            <form id="registerForm" class="auth-form hidden">
-                <input type="email" id="registerEmail" placeholder="Email" required>
-                <input type="password" id="registerPassword" placeholder="Password (min 6 chars)" required>
-                <button type="submit" class="btn btn-primary">Register</button>
-            </form>
-        </div>
-
-        <!-- User Dashboard -->
-        <div class="user-section hidden" id="userSection">
-            <div class="user-info">
-                <span class="user-avatar">👤</span>
-                <span class="user-email" id="userEmail"></span>
-            </div>
-
-            <div class="credits-display" id="creditsDisplay">
-                <span class="credits-label">Credits</span>
-                <span class="credits-value" id="creditsValue">0</span>
-            </div>
-
-            <div class="usage-display" id="usageDisplay">
-                <div class="usage-item">
-                    <span>Images</span>
-                    <span id="imageUsage">0/3</span>
-                </div>
-                <div class="usage-item">
-                    <span>Videos</span>
-                    <span id="videoUsage">0/3</span>
-                </div>
-            </div>
-
-            <!-- Top Up Section -->
-            <div class="topup-section">
-                <button class="btn btn-secondary" id="topupBtn">💰 Nạp tiền</button>
-                <div class="packages hidden" id="packagesMenu">
-                    <button class="package-btn" data-package="basic">Basic - $22 (1000 credits)</button>
-                    <button class="package-btn" data-package="pro">Pro - $55 (3000 credits)</button>
-                    <button class="package-btn" data-package="enterprise">Enterprise - $110 (7000 credits)</button>
-                </div>
-            </div>
-
-            <button class="btn btn-outline" id="logoutBtn">🚪 Logout</button>
-        </div>
-
-        <!-- API Key Setting -->
-        <div class="api-section">
-            <button class="btn btn-ghost" id="apiSettingsBtn">⚙️ API Settings</button>
-            <div class="api-form hidden" id="apiForm">
-                <input type="password" id="customApiKey" placeholder="Google API Key (optional)">
-                <input type="password" id="customHfToken" placeholder="HuggingFace Token (optional)"
-                    style="margin-top: 8px;">
-                <small>Override server API keys</small>
-            </div>
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item" data-section="settings">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
         </div>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
-        <header class="header">
-            <button class="menu-btn" id="menuBtn">☰</button>
-            <h2>AI Hub Total</h2>
-            <p>Your all-in-one AI dashboard for creative content generation</p>
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <button class="menu-toggle" id="menuBtn">☰</button>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search features...">
+            </div>
+            <div class="top-bar-actions">
+                <button class="icon-btn" id="notifBtn">🔔</button>
+                <div class="user-menu" id="userMenu">
+                    <div class="user-avatar" id="userAvatar">?</div>
+                    <div class="user-dropdown hidden" id="userDropdown">
+                        <div class="dropdown-header">
+                            <span id="dropdownEmail">Guest</span>
+                        </div>
+                        <div class="dropdown-item" id="loginBtn">🔐 Login</div>
+                        <div class="dropdown-item" id="registerBtn">📝 Register</div>
+                        <div class="dropdown-item hidden" id="logoutBtn">🚪 Logout</div>
+                    </div>
+                </div>
+            </div>
         </header>
 
-        <!-- Feature Tabs -->
-        <nav class="feature-tabs">
-            <button class="feature-tab active" data-feature="genImage">🖼️ Gen Image</button>
-            <button class="feature-tab" data-feature="promptImage">📝 Prompt from Image</button>
-            <button class="feature-tab" data-feature="promptVideo">🎬 Prompt from Video</button>
-            <button class="feature-tab" data-feature="landing">🌐 Landing Page</button>
-            <button class="feature-tab" data-feature="tryon">👔 Clothes Swap</button>
-            <button class="feature-tab" data-feature="genVideo">🎥 Gen Video</button>
-        </nav>
+        <!-- Dashboard Section -->
+        <section class="content-section active" id="dashboard-section">
+            <div class="section-header">
+                <h1>Welcome to <span class="gradient-text">AI Hub Total</span></h1>
+                <p>Revolutionize your workflow with AI-powered tools</p>
+            </div>
 
-        <!-- Feature Content -->
-        <div class="feature-content">
-            <!-- Gen Image -->
-            <section class="feature-panel active" id="genImage">
-                <h3>🖼️ Image Generation</h3>
-                <p>Generate images using Google Gemini AI</p>
-
-                <div class="input-group">
-                    <label for="imagePrompt">Enter your image prompt:</label>
-                    <textarea id="imagePrompt"
-                        placeholder="A beautiful sunset over mountains with vibrant orange and purple colors..."></textarea>
-                </div>
-
-                <button class="btn btn-primary btn-large" id="generateImageBtn">🎨 Generate Image</button>
-
-                <div class="progress-container hidden" id="imageProgress">
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🖼️</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statImages">0</span>
+                        <span class="stat-label">Images Today</span>
                     </div>
-                    <span class="progress-text">Generating...</span>
+                    <div class="stat-limit">/ <span id="imageLimit">3</span></div>
                 </div>
-
-                <div class="result-container hidden" id="imageResult">
-                    <img id="generatedImage" alt="Generated Image">
-                    <button class="btn btn-secondary" id="downloadImageBtn">📥 Download Image</button>
-                </div>
-            </section>
-
-            <!-- Prompt from Image -->
-            <section class="feature-panel" id="promptImage">
-                <h3>📝 Prompt from Image</h3>
-                <p>Upload an image to generate an enhanced prompt for AI image generation</p>
-
-                <div class="upload-area" id="imageUploadArea">
-                    <input type="file" id="imageUpload" accept="image/*" hidden>
-                    <div class="upload-content">
-                        <span class="upload-icon">📁</span>
-                        <p>Click or drag image here</p>
-                        <small>Max size: 10MB</small>
+                <div class="stat-card">
+                    <div class="stat-icon">🎥</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statVideos">0</span>
+                        <span class="stat-label">Videos Today</span>
                     </div>
-                    <img id="uploadedImagePreview" class="upload-preview hidden" alt="Preview">
+                    <div class="stat-limit">/ <span id="videoLimit">3</span></div>
                 </div>
-
-                <button class="btn btn-primary btn-large" id="analyzeImageBtn">🔍 Analyze & Generate Prompt</button>
-
-                <div class="progress-container hidden" id="promptImageProgress">
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
+                <div class="stat-card premium">
+                    <div class="stat-icon">💎</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statCredits">0</span>
+                        <span class="stat-label">Credits</span>
                     </div>
-                    <span class="progress-text">Analyzing...</span>
+                    <button class="btn btn-sm btn-glow" id="topupBtn">Top Up</button>
                 </div>
+            </div>
 
-                <div class="result-container hidden" id="promptImageResult">
-                    <label>Generated Prompt:</label>
-                    <textarea id="generatedPrompt" readonly></textarea>
-                    <button class="btn btn-secondary" id="copyPromptBtn">📋 Copy Prompt</button>
+            <!-- Feature Cards -->
+            <h2 class="section-title">AI Features</h2>
+            <div class="features-grid">
+                <div class="feature-card" data-feature="generate">
+                    <div class="feature-icon">🖼️</div>
+                    <h3>Image Generation</h3>
+                    <p>Create stunning images from text prompts using Gemini AI</p>
+                    <button class="btn btn-primary">Try Now</button>
                 </div>
-            </section>
+                <div class="feature-card" data-feature="prompt-image">
+                    <div class="feature-icon">📝</div>
+                    <h3>Prompt from Image</h3>
+                    <p>Extract and enhance prompts from any image</p>
+                    <button class="btn btn-primary">Try Now</button>
+                </div>
+                <div class="feature-card" data-feature="prompt-video">
+                    <div class="feature-icon">🎬</div>
+                    <h3>Prompt from Video</h3>
+                    <p>Generate prompts from video content (max 15s)</p>
+                    <button class="btn btn-primary">Try Now</button>
+                </div>
+                <div class="feature-card" data-feature="landing">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Landing Page Generator</h3>
+                    <p>Create complete HTML/CSS/JS landing pages</p>
+                    <button class="btn btn-primary">Try Now</button>
+                </div>
+                <div class="feature-card" data-feature="tryon">
+                    <div class="feature-icon">👔</div>
+                    <h3>Virtual Try-On</h3>
+                    <p>AI-powered clothes swap technology</p>
+                    <button class="btn btn-primary">Try Now</button>
+                </div>
+                <div class="feature-card" data-feature="video">
+                    <div class="feature-icon">🎥</div>
+                    <h3>Video Generation</h3>
+                    <p>Create videos from text descriptions</p>
+                    <button class="btn btn-primary">Try Now</button>
+                </div>
+            </div>
+        </section>
 
-            <!-- Prompt from Video -->
-            <section class="feature-panel" id="promptVideo">
-                <h3>🎬 Prompt from Video</h3>
-                <p>Upload a video (max 15 seconds) to generate an AI prompt</p>
-
-                <div class="upload-area" id="videoUploadArea">
-                    <input type="file" id="videoUpload" accept="video/*" hidden>
-                    <div class="upload-content">
-                        <span class="upload-icon">🎥</span>
-                        <p>Click or drag video here</p>
-                        <small>Max duration: 15 seconds</small>
+        <!-- Image Generation Section -->
+        <section class="content-section" id="generate-section">
+            <div class="section-header">
+                <h1>🖼️ Image Generation</h1>
+                <p>Create stunning images with AI</p>
+            </div>
+            <div class="tool-container">
+                <div class="tool-card">
+                    <div class="input-group">
+                        <label>Describe your image</label>
+                        <textarea id="imagePrompt" rows="4"
+                            placeholder="A futuristic city at sunset with flying cars..."></textarea>
                     </div>
-                    <video id="uploadedVideoPreview" class="upload-preview hidden" controls></video>
-                </div>
-
-                <button class="btn btn-primary btn-large" id="analyzeVideoBtn">🔍 Analyze Video</button>
-
-                <div class="progress-container hidden" id="promptVideoProgress">
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
+                    <button class="btn btn-primary btn-lg" id="generateImageBtn">
+                        <span class="btn-icon">✨</span> Generate Image
+                    </button>
+                    <div class="progress-container hidden" id="imageProgress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">Generating...</span>
                     </div>
-                    <span class="progress-text">Extracting frames...</span>
                 </div>
-
-                <div class="result-container hidden" id="promptVideoResult">
-                    <label>Generated Prompt:</label>
-                    <textarea id="generatedVideoPrompt" readonly></textarea>
-                    <button class="btn btn-secondary" id="copyVideoPromptBtn">📋 Copy Prompt</button>
-                </div>
-            </section>
-
-            <!-- Landing Page Generator -->
-            <section class="feature-panel" id="landing">
-                <h3>🌐 Landing Page Generator</h3>
-                <p>Generate a complete, modern landing page from your idea</p>
-
-                <div class="input-group">
-                    <label for="landingIdea">Describe your landing page idea:</label>
-                    <textarea id="landingIdea"
-                        placeholder="A SaaS product for team collaboration with features like real-time messaging, file sharing, and project management..."></textarea>
-                </div>
-
-                <button class="btn btn-primary btn-large" id="generateLandingBtn">🚀 Generate Landing Page</button>
-
-                <div class="progress-container hidden" id="landingProgress">
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
+                <div class="result-card hidden" id="imageResult">
+                    <h3>Generated Image</h3>
+                    <div class="image-preview">
+                        <img id="generatedImage" src="" alt="Generated">
                     </div>
-                    <span class="progress-text">Generating...</span>
+                    <button class="btn btn-secondary" id="downloadImageBtn">📥 Download</button>
                 </div>
+            </div>
+        </section>
 
-                <div class="result-container hidden" id="landingResult">
-                    <div class="preview-toggle">
-                        <button class="btn btn-secondary active" id="previewBtn">Preview</button>
-                        <button class="btn btn-secondary" id="codeBtn">Code</button>
+        <!-- Prompt from Image Section -->
+        <section class="content-section" id="prompt-image-section">
+            <div class="section-header">
+                <h1>📝 Prompt from Image</h1>
+                <p>Extract AI prompts from any image</p>
+            </div>
+            <div class="tool-container">
+                <div class="tool-card">
+                    <div class="upload-area" id="imageUploadArea">
+                        <input type="file" id="imageUpload" accept="image/*" hidden>
+                        <div class="upload-content">
+                            <span class="upload-icon">📤</span>
+                            <p>Drop image here or click to upload</p>
+                        </div>
+                        <img class="upload-preview hidden" id="uploadedImagePreview" src="" alt="Preview">
+                    </div>
+                    <button class="btn btn-primary btn-lg" id="analyzeImageBtn">
+                        <span class="btn-icon">🔍</span> Analyze Image
+                    </button>
+                    <div class="progress-container hidden" id="promptImageProgress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">Analyzing...</span>
+                    </div>
+                </div>
+                <div class="result-card hidden" id="promptImageResult">
+                    <h3>Generated Prompt</h3>
+                    <textarea id="generatedPrompt" rows="6" readonly></textarea>
+                    <button class="btn btn-secondary" id="copyPromptBtn">📋 Copy</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prompt from Video Section -->
+        <section class="content-section" id="prompt-video-section">
+            <div class="section-header">
+                <h1>🎬 Prompt from Video</h1>
+                <p>Generate prompts from video content (max 15s)</p>
+            </div>
+            <div class="tool-container">
+                <div class="tool-card">
+                    <div class="upload-area" id="videoUploadArea">
+                        <input type="file" id="videoUpload" accept="video/*" hidden>
+                        <div class="upload-content">
+                            <span class="upload-icon">🎥</span>
+                            <p>Drop video here or click to upload</p>
+                            <small>Maximum 15 seconds</small>
+                        </div>
+                        <video class="upload-preview hidden" id="uploadedVideoPreview" controls></video>
+                    </div>
+                    <button class="btn btn-primary btn-lg" id="analyzeVideoBtn">
+                        <span class="btn-icon">🔍</span> Analyze Video
+                    </button>
+                    <div class="progress-container hidden" id="promptVideoProgress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">Analyzing frames...</span>
+                    </div>
+                </div>
+                <div class="result-card hidden" id="promptVideoResult">
+                    <h3>Generated Prompt</h3>
+                    <textarea id="generatedVideoPrompt" rows="6" readonly></textarea>
+                    <button class="btn btn-secondary" id="copyVideoPromptBtn">📋 Copy</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Landing Page Generator Section -->
+        <section class="content-section" id="landing-section">
+            <div class="section-header">
+                <h1>🌐 Landing Page Generator</h1>
+                <p>Create complete websites with AI</p>
+            </div>
+            <div class="tool-container">
+                <div class="tool-card">
+                    <div class="input-group">
+                        <label>Describe your landing page idea</label>
+                        <textarea id="landingIdea" rows="4"
+                            placeholder="A modern SaaS product landing page for a project management tool..."></textarea>
+                    </div>
+                    <button class="btn btn-primary btn-lg" id="generateLandingBtn">
+                        <span class="btn-icon">🚀</span> Generate Landing Page
+                    </button>
+                    <div class="progress-container hidden" id="landingProgress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">Creating your page...</span>
+                    </div>
+                </div>
+                <div class="result-card hidden" id="landingResult">
+                    <div class="result-tabs">
+                        <button class="tab-btn active" id="previewBtn">👁️ Preview</button>
+                        <button class="tab-btn" id="codeBtn">💻 Code</button>
                     </div>
                     <iframe id="landingPreview" class="landing-preview"></iframe>
-                    <textarea id="landingCode" class="hidden" readonly></textarea>
+                    <textarea id="landingCode" class="hidden" rows="15"></textarea>
                     <button class="btn btn-secondary" id="downloadLandingBtn">📥 Download HTML</button>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Virtual Try-On -->
-            <section class="feature-panel" id="tryon">
-                <h3>👔 Virtual Try-On (Clothes Swap)</h3>
-                <p>Upload a person image and a clothes image to see a virtual try-on</p>
-
-                <div class="dual-upload">
+        <!-- Virtual Try-On Section -->
+        <section class="content-section" id="tryon-section">
+            <div class="section-header">
+                <h1>👔 Virtual Try-On</h1>
+                <p>AI-powered clothes swap technology</p>
+            </div>
+            <div class="tool-container tryon-container">
+                <div class="tool-card">
+                    <h3>Person Photo</h3>
                     <div class="upload-area" id="personUploadArea">
                         <input type="file" id="personUpload" accept="image/*" hidden>
                         <div class="upload-content">
                             <span class="upload-icon">🧑</span>
-                            <p>Person Image</p>
-                            <small>Full body works best</small>
+                            <p>Upload person photo</p>
                         </div>
-                        <img id="personPreview" class="upload-preview hidden" alt="Person">
+                        <img class="upload-preview hidden" id="personPreview" src="" alt="Person">
                     </div>
-
+                </div>
+                <div class="tool-card">
+                    <h3>Clothing Item</h3>
                     <div class="upload-area" id="clothesUploadArea">
                         <input type="file" id="clothesUpload" accept="image/*" hidden>
                         <div class="upload-content">
                             <span class="upload-icon">👕</span>
-                            <p>Clothes Image</p>
-                            <small>The garment to try on</small>
+                            <p>Upload clothing image</p>
                         </div>
-                        <img id="clothesPreview" class="upload-preview hidden" alt="Clothes">
+                        <img class="upload-preview hidden" id="clothesPreview" src="" alt="Clothes">
                     </div>
                 </div>
-
-                <div class="input-group">
-                    <input type="text" id="garmentDesc" placeholder="Garment description (optional)">
-                </div>
-
-                <button class="btn btn-primary btn-large" id="tryonBtn">👗 Try On</button>
-
-                <div class="progress-container hidden" id="tryonProgress">
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
+                <div class="tool-card full-width">
+                    <div class="input-group">
+                        <label>Garment Description (optional)</label>
+                        <input type="text" id="garmentDesc" placeholder="e.g., A blue silk dress">
                     </div>
-                    <span class="progress-text">Processing... (1-2 min)</span>
-                </div>
-
-                <div class="result-container hidden" id="tryonResult">
-                    <img id="tryonImage" alt="Try-on Result">
-                    <button class="btn btn-secondary" id="downloadTryonBtn">📥 Download Result</button>
-                </div>
-            </section>
-
-            <!-- Video Generation -->
-            <section class="feature-panel" id="genVideo">
-                <h3>🎥 Video Generation</h3>
-                <p>Generate videos from text prompts using AI</p>
-
-                <div class="alert alert-warning">
-                    ⚠️ Video generation may take 1-3 minutes. Quality depends on free tier availability.
-                </div>
-
-                <div class="input-group">
-                    <label for="videoPrompt">Enter your video prompt:</label>
-                    <textarea id="videoPrompt"
-                        placeholder="A cat playing with a ball of yarn in a sunny living room..."></textarea>
-                </div>
-
-                <button class="btn btn-primary btn-large" id="generateVideoBtn">🎬 Generate Video</button>
-
-                <div class="progress-container hidden" id="videoProgress">
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
+                    <button class="btn btn-primary btn-lg" id="tryonBtn">
+                        <span class="btn-icon">✨</span> Start Try-On
+                    </button>
+                    <div class="progress-container hidden" id="tryonProgress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">Processing...</span>
                     </div>
-                    <span class="progress-text">Generating video...</span>
                 </div>
-
-                <div class="result-container hidden" id="videoResult">
-                    <video id="generatedVideo" controls></video>
-                    <button class="btn btn-secondary" id="downloadVideoBtn">📥 Download Video</button>
+                <div class="result-card hidden" id="tryonResult">
+                    <h3>Result</h3>
+                    <div class="image-preview">
+                        <img id="tryonImage" src="" alt="Try-on result">
+                    </div>
+                    <button class="btn btn-secondary" id="downloadTryonBtn">📥 Download</button>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
 
-        <!-- Footer -->
-        <footer class="footer">
-            Made with Fluxial66❤️VN Thanks for using and sharing
-        </footer>
+        <!-- Video Generation Section -->
+        <section class="content-section" id="video-section">
+            <div class="section-header">
+                <h1>🎥 Video Generation</h1>
+                <p>Create videos from text descriptions</p>
+            </div>
+            <div class="tool-container">
+                <div class="tool-card">
+                    <div class="input-group">
+                        <label>Describe your video</label>
+                        <textarea id="videoPrompt" rows="4"
+                            placeholder="A cat playing piano in a jazz club..."></textarea>
+                    </div>
+                    <button class="btn btn-primary btn-lg" id="generateVideoBtn">
+                        <span class="btn-icon">🎬</span> Generate Video
+                    </button>
+                    <div class="progress-container hidden" id="videoProgress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">Generating video...</span>
+                    </div>
+                </div>
+                <div class="result-card hidden" id="videoResult">
+                    <h3>Generated Video</h3>
+                    <video id="generatedVideo" controls class="video-preview"></video>
+                    <button class="btn btn-secondary" id="downloadVideoBtn">📥 Download</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section class="content-section" id="settings-section">
+            <div class="section-header">
+                <h1>⚙️ Settings</h1>
+                <p>Configure your API keys and preferences</p>
+            </div>
+            <div class="settings-container">
+                <div class="settings-card">
+                    <h3>🔑 API Keys</h3>
+                    <p class="settings-desc">Enter your own API keys to use without limits</p>
+                    <div class="input-group">
+                        <label>Google API Key</label>
+                        <input type="password" id="customApiKey" placeholder="Enter your Google API key">
+                    </div>
+                    <div class="input-group">
+                        <label>HuggingFace Token</label>
+                        <input type="password" id="customHfToken" placeholder="Enter your HuggingFace token">
+                    </div>
+                    <button class="btn btn-primary" id="saveApiKeysBtn">Save Keys</button>
+                </div>
+                <div class="settings-card">
+                    <h3>💳 Credit Packages</h3>
+                    <p class="settings-desc">Purchase credits for unlimited access</p>
+                    <div class="packages-grid">
+                        <div class="package-card" data-package="basic">
+                            <div class="package-name">Basic</div>
+                            <div class="package-credits">1,000 Credits</div>
+                            <div class="package-price">$22</div>
+                            <button class="btn btn-secondary">Buy Now</button>
+                        </div>
+                        <div class="package-card featured" data-package="pro">
+                            <div class="package-badge">Popular</div>
+                            <div class="package-name">Pro</div>
+                            <div class="package-credits">3,000 Credits</div>
+                            <div class="package-price">$55</div>
+                            <button class="btn btn-primary">Buy Now</button>
+                        </div>
+                        <div class="package-card" data-package="enterprise">
+                            <div class="package-name">Enterprise</div>
+                            <div class="package-credits">7,000 Credits</div>
+                            <div class="package-price">$110</div>
+                            <button class="btn btn-secondary">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Toast Notifications -->
+    <!-- Auth Modal -->
+    <div class="modal hidden" id="authModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <div class="modal-header">
+                <div class="modal-tabs">
+                    <button class="modal-tab active" data-tab="login">Login</button>
+                    <button class="modal-tab" data-tab="register">Register</button>
+                </div>
+            </div>
+            <form id="loginForm" class="auth-form">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required placeholder="your@email.com">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Login</button>
+            </form>
+            <form id="registerForm" class="auth-form hidden">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" required placeholder="your@email.com">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" required minlength="6" placeholder="Min 6 characters">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
     <script src="script.js"></script>
 </body>
-
 
 </html>
