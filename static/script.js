@@ -1,6 +1,6 @@
 /**
  * AI Hub Total - Frontend JavaScript
- * Handles all UI interactions and API calls
+ * Modern Dashboard Version
  */
 
 // ============================================
@@ -31,11 +31,11 @@ function showToast(message, type = 'info') {
 function setLoading(button, loading) {
     if (loading) {
         button.disabled = true;
-        button.dataset.originalText = button.textContent;
-        button.textContent = 'Loading...';
+        button.dataset.originalText = button.innerHTML;
+        button.innerHTML = '<span class="btn-icon">⏳</span> Loading...';
     } else {
         button.disabled = false;
-        button.textContent = button.dataset.originalText || button.textContent;
+        button.innerHTML = button.dataset.originalText || button.innerHTML;
     }
 }
 
@@ -114,66 +114,128 @@ function getCustomHfToken() {
 }
 
 // ============================================
+// Navigation
+// ============================================
+
+function switchSection(sectionName) {
+    // Update nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.section === sectionName);
+    });
+
+    // Update sections
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.toggle('active', section.id === `${sectionName}-section`);
+    });
+
+    // Close mobile sidebar
+    document.getElementById('sidebar').classList.remove('open');
+}
+
+// ============================================
 // Authentication
 // ============================================
 
 async function updateAuthUI() {
-    const authSection = document.getElementById('authSection');
-    const userSection = document.getElementById('userSection');
+    const userDropdown = document.getElementById('userDropdown');
+    const loginBtn = document.getElementById('loginBtn');
+    const registerBtn = document.getElementById('registerBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const dropdownEmail = document.getElementById('dropdownEmail');
+    const userAvatar = document.getElementById('userAvatar');
 
     if (authToken) {
         try {
             currentUser = await apiCall('/auth/me');
-            authSection.classList.add('hidden');
-            userSection.classList.remove('hidden');
 
-            document.getElementById('userEmail').textContent = currentUser.email;
-            document.getElementById('creditsValue').textContent = currentUser.credits.toFixed(0);
-            document.getElementById('imageUsage').textContent =
-                `${currentUser.usage.image.used}/${currentUser.usage.image.limit}`;
-            document.getElementById('videoUsage').textContent =
-                `${currentUser.usage.video.used}/${currentUser.usage.video.limit}`;
+            dropdownEmail.textContent = currentUser.email;
+            userAvatar.textContent = currentUser.email[0].toUpperCase();
+            loginBtn.classList.add('hidden');
+            registerBtn.classList.add('hidden');
+            logoutBtn.classList.remove('hidden');
 
-            if (currentUser.credits > 0) {
-                document.getElementById('creditsDisplay').classList.remove('hidden');
-                document.getElementById('usageDisplay').classList.add('hidden');
-            } else {
-                document.getElementById('creditsDisplay').classList.add('hidden');
-                document.getElementById('usageDisplay').classList.remove('hidden');
-            }
+            // Update stats
+            document.getElementById('statImages').textContent = currentUser.usage.image.used;
+            document.getElementById('statVideos').textContent = currentUser.usage.video.used;
+            document.getElementById('statCredits').textContent = Math.floor(currentUser.credits);
+            document.getElementById('imageLimit').textContent = currentUser.usage.image.limit;
+            document.getElementById('videoLimit').textContent = currentUser.usage.video.limit;
+
         } catch (error) {
             console.error('Auth check failed:', error);
             logout();
         }
     } else {
-        authSection.classList.remove('hidden');
-        userSection.classList.add('hidden');
+        dropdownEmail.textContent = 'Guest';
+        userAvatar.textContent = '?';
+        loginBtn.classList.remove('hidden');
+        registerBtn.classList.remove('hidden');
+        logoutBtn.classList.add('hidden');
         currentUser = null;
+
+        // Reset stats
+        document.getElementById('statImages').textContent = '0';
+        document.getElementById('statVideos').textContent = '0';
+        document.getElementById('statCredits').textContent = '0';
     }
 }
 
+function showAuthModal(tab = 'login') {
+    const modal = document.getElementById('authModal');
+    modal.classList.remove('hidden');
+
+    // Switch tab
+    document.querySelectorAll('.modal-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.tab === tab);
+    });
+    document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+}
+
+function hideAuthModal() {
+    document.getElementById('authModal').classList.add('hidden');
+}
+
 async function login(email, password) {
+    // Get reCAPTCHA token
+    const captchaToken = grecaptcha.getResponse(0); // First captcha (login)
+    if (!captchaToken) {
+        throw new Error('Please complete the CAPTCHA verification');
+    }
+
     const data = await apiCall('/auth/login', {
         method: 'POST',
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, captchaToken })
     });
 
     authToken = data.token;
     localStorage.setItem('authToken', authToken);
     await updateAuthUI();
-    showToast('Login successful!', 'success');
+    hideAuthModal();
+    grecaptcha.reset(0); // Reset captcha
+    showToast('Welcome back!', 'success');
 }
 
 async function register(email, password) {
+    // Validate Gmail
+    if (!email.toLowerCase().endsWith('@gmail.com')) {
+        throw new Error('Only @gmail.com addresses are allowed');
+    }
+
+    // Get reCAPTCHA token
+    const captchaToken = grecaptcha.getResponse(1); // Second captcha (register)
+    if (!captchaToken) {
+        throw new Error('Please complete the CAPTCHA verification');
+    }
+
     await apiCall('/auth/register', {
         method: 'POST',
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, captchaToken })
     });
 
-    showToast('Registration successful! Please login.', 'success');
-
-    // Switch to login tab
-    document.querySelector('[data-tab="login"]').click();
+    grecaptcha.reset(1); // Reset captcha
+    showToast('Account created! Please login.', 'success');
+    showAuthModal('login');
 }
 
 function logout() {
@@ -204,6 +266,7 @@ async function purchaseCredits(packageId) {
 async function generateImage() {
     if (!currentUser) {
         showToast('Please login first', 'warning');
+        showAuthModal();
         return;
     }
 
@@ -244,6 +307,7 @@ async function generateImage() {
 async function analyzeImage() {
     if (!currentUser) {
         showToast('Please login first', 'warning');
+        showAuthModal();
         return;
     }
 
@@ -285,6 +349,7 @@ async function analyzeImage() {
 async function analyzeVideo() {
     if (!currentUser) {
         showToast('Please login first', 'warning');
+        showAuthModal();
         return;
     }
 
@@ -326,6 +391,7 @@ async function analyzeVideo() {
 async function generateLanding() {
     if (!currentUser) {
         showToast('Please login first', 'warning');
+        showAuthModal();
         return;
     }
 
@@ -369,6 +435,7 @@ async function generateLanding() {
 async function virtualTryon() {
     if (!currentUser) {
         showToast('Please login first', 'warning');
+        showAuthModal();
         return;
     }
 
@@ -417,6 +484,7 @@ async function virtualTryon() {
 async function generateVideo() {
     if (!currentUser) {
         showToast('Please login first', 'warning');
+        showAuthModal();
         return;
     }
 
@@ -482,31 +550,26 @@ function setupUploadArea(areaId, inputId, previewId, type = 'image') {
 
         if (e.dataTransfer.files.length) {
             input.files = e.dataTransfer.files;
-            handleFileSelect(input, preview, type);
+            handleFileSelect(input, preview, area, type);
         }
     });
 
     input.addEventListener('change', () => {
-        handleFileSelect(input, preview, type);
+        handleFileSelect(input, preview, area, type);
     });
 }
 
-function handleFileSelect(input, preview, type) {
+function handleFileSelect(input, preview, area, type) {
     if (!input.files.length || !preview) return;
 
     const file = input.files[0];
     const url = URL.createObjectURL(file);
 
     preview.classList.remove('hidden');
-
-    if (type === 'video') {
-        preview.src = url;
-    } else {
-        preview.src = url;
-    }
+    preview.src = url;
 
     // Hide upload content
-    const content = preview.parentElement.querySelector('.upload-content');
+    const content = area.querySelector('.upload-content');
     if (content) content.classList.add('hidden');
 }
 
@@ -545,15 +608,63 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check auth on load
     updateAuthUI();
 
-    // Auth tabs
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+    // Sidebar navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = item.dataset.section;
+            if (section) {
+                switchSection(section);
+            }
+        });
+    });
 
-            const tab = btn.dataset.tab;
-            document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
-            document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+    // Feature cards
+    document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const feature = card.dataset.feature;
+            if (feature) {
+                switchSection(feature);
+            }
+        });
+    });
+
+    // Mobile menu toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    // User menu dropdown
+    document.getElementById('userAvatar').addEventListener('click', () => {
+        document.getElementById('userDropdown').classList.toggle('hidden');
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+        const userMenu = document.getElementById('userMenu');
+        const dropdown = document.getElementById('userDropdown');
+        if (!userMenu.contains(e.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+
+    // Auth buttons
+    document.getElementById('loginBtn').addEventListener('click', () => showAuthModal('login'));
+    document.getElementById('registerBtn').addEventListener('click', () => showAuthModal('register'));
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    // Auth modal
+    document.getElementById('closeModal').addEventListener('click', hideAuthModal);
+    document.querySelector('.modal-overlay').addEventListener('click', hideAuthModal);
+
+    document.querySelectorAll('.modal-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabName = tab.dataset.tab;
+            document.querySelectorAll('.modal-tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.tab === tabName);
+            });
+            document.getElementById('loginForm').classList.toggle('hidden', tabName !== 'login');
+            document.getElementById('registerForm').classList.toggle('hidden', tabName !== 'register');
         });
     });
 
@@ -583,39 +694,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Logout
-    document.getElementById('logoutBtn').addEventListener('click', logout);
-
-    // Top up
+    // Top up button
     document.getElementById('topupBtn').addEventListener('click', () => {
-        document.getElementById('packagesMenu').classList.toggle('hidden');
+        switchSection('settings');
     });
 
-    document.querySelectorAll('.package-btn').forEach(btn => {
+    // Package buttons
+    document.querySelectorAll('.package-card button').forEach(btn => {
         btn.addEventListener('click', () => {
-            purchaseCredits(btn.dataset.package);
-            document.getElementById('packagesMenu').classList.add('hidden');
-        });
-    });
-
-    // API settings
-    document.getElementById('apiSettingsBtn').addEventListener('click', () => {
-        document.getElementById('apiForm').classList.toggle('hidden');
-    });
-
-    // Mobile menu
-    document.getElementById('menuBtn').addEventListener('click', () => {
-        document.getElementById('sidebar').classList.toggle('open');
-    });
-
-    // Feature tabs
-    document.querySelectorAll('.feature-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.feature-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.feature-panel').forEach(p => p.classList.remove('active'));
-
-            tab.classList.add('active');
-            document.getElementById(tab.dataset.feature).classList.add('active');
+            const packageId = btn.closest('.package-card').dataset.package;
+            purchaseCredits(packageId);
         });
     });
 
@@ -675,6 +763,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (video.dataset.filename) {
             downloadFile(video.dataset.filename);
         }
+    });
+
+    // Save API Keys
+    document.getElementById('saveApiKeysBtn')?.addEventListener('click', () => {
+        showToast('API keys saved for this session', 'success');
     });
 
     // Close sidebar on outside click (mobile)
