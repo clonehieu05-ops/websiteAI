@@ -4,16 +4,41 @@
  */
 
 // ============================================
-// Configuration & State
+// Global State
 // ============================================
 
 const API_BASE = '/api';
 let authToken = localStorage.getItem('authToken');
 let currentUser = null;
+let loginCaptchaId = null;
+let registerCaptchaId = null;
+const SITE_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'; // Test Key
 
 // ============================================
 // Utility Functions
 // ============================================
+
+// Global function for reCAPTCHA callback
+window.onCaptchaLoad = function () {
+    try {
+        if (document.getElementById('loginCaptcha')) {
+            loginCaptchaId = grecaptcha.render('loginCaptcha', {
+                'sitekey': SITE_KEY,
+                'theme': 'dark'
+            });
+        }
+
+        if (document.getElementById('registerCaptcha')) {
+            registerCaptchaId = grecaptcha.render('registerCaptcha', {
+                'sitekey': SITE_KEY,
+                'theme': 'dark'
+            });
+        }
+        console.log('CAPTCHA loaded explicitly', { loginCaptchaId, registerCaptchaId });
+    } catch (e) {
+        console.error('CAPTCHA load error:', e);
+    }
+};
 
 function showToast(message, type = 'info') {
     const container = document.getElementById('toastContainer');
@@ -155,11 +180,15 @@ async function updateAuthUI() {
             logoutBtn.classList.remove('hidden');
 
             // Update stats
-            document.getElementById('statImages').textContent = currentUser.usage.image.used;
-            document.getElementById('statVideos').textContent = currentUser.usage.video.used;
-            document.getElementById('statCredits').textContent = Math.floor(currentUser.credits);
-            document.getElementById('imageLimit').textContent = currentUser.usage.image.limit;
-            document.getElementById('videoLimit').textContent = currentUser.usage.video.limit;
+            if (currentUser.usage) {
+                document.getElementById('statImages').textContent = currentUser.usage.image.used;
+                document.getElementById('statVideos').textContent = currentUser.usage.video.used;
+                document.getElementById('imageLimit').textContent = currentUser.usage.image.limit;
+                document.getElementById('videoLimit').textContent = currentUser.usage.video.limit;
+            }
+            if (currentUser.credits !== undefined) {
+                document.getElementById('statCredits').textContent = Math.floor(currentUser.credits);
+            }
 
         } catch (error) {
             console.error('Auth check failed:', error);
@@ -197,8 +226,12 @@ function hideAuthModal() {
 }
 
 async function login(email, password) {
-    // Get reCAPTCHA token
-    const captchaToken = grecaptcha.getResponse(0); // First captcha (login)
+    if (loginCaptchaId === null) {
+        throw new Error('CAPTCHA not initialized. Please refresh page.');
+    }
+
+    // Get reCAPTCHA token using specific widget ID
+    const captchaToken = grecaptcha.getResponse(loginCaptchaId);
     if (!captchaToken) {
         throw new Error('Please complete the CAPTCHA verification');
     }
@@ -212,7 +245,7 @@ async function login(email, password) {
     localStorage.setItem('authToken', authToken);
     await updateAuthUI();
     hideAuthModal();
-    grecaptcha.reset(0); // Reset captcha
+    grecaptcha.reset(loginCaptchaId); // Reset specific captcha
     showToast('Welcome back!', 'success');
 }
 
@@ -222,8 +255,12 @@ async function register(email, password) {
         throw new Error('Only @gmail.com addresses are allowed');
     }
 
-    // Get reCAPTCHA token
-    const captchaToken = grecaptcha.getResponse(1); // Second captcha (register)
+    // Get reCAPTCHA token using specific widget ID
+    if (registerCaptchaId === null) {
+        throw new Error('CAPTCHA not initialized. Please refresh page.');
+    }
+
+    const captchaToken = grecaptcha.getResponse(registerCaptchaId);
     if (!captchaToken) {
         throw new Error('Please complete the CAPTCHA verification');
     }
@@ -233,7 +270,7 @@ async function register(email, password) {
         body: JSON.stringify({ email, password, captchaToken })
     });
 
-    grecaptcha.reset(1); // Reset captcha
+    grecaptcha.reset(registerCaptchaId); // Reset specific captcha
     showToast('Account created! Please login.', 'success');
     showAuthModal('login');
 }
@@ -606,7 +643,12 @@ function copyToClipboard(elementId) {
 
 document.addEventListener('DOMContentLoaded', () => {
     // Check auth on load
-    updateAuthUI();
+    try {
+        updateAuthUI();
+        console.log("System initialized");
+    } catch (e) {
+        console.error("Init failed:", e);
+    }
 
     // Sidebar navigation
     document.querySelectorAll('.nav-item').forEach(item => {
