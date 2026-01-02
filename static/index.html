@@ -9,9 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/styles.css?v=2">
     <!-- Google reCAPTCHA -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onCaptchaLoad&render=explicit" async defer></script>
 </head>
 
 <body>
@@ -466,8 +466,7 @@
                     <input type="password" id="loginPassword" required placeholder="••••••••">
                 </div>
                 <div class="captcha-container">
-                    <div class="g-recaptcha" id="loginCaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-                        data-theme="dark"></div>
+                    <div id="loginCaptcha"></div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg">Login</button>
             </form>
@@ -482,8 +481,7 @@
                     <input type="password" id="registerPassword" required minlength="6" placeholder="Min 6 characters">
                 </div>
                 <div class="captcha-container">
-                    <div class="g-recaptcha" id="registerCaptcha"
-                        data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-theme="dark"></div>
+                    <div id="registerCaptcha"></div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
             </form>
@@ -493,7 +491,7 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <script src="/static/script.js"></script>
+    <script src="/static/script.js?v=1"></script>
 </body>
 
 </html>
