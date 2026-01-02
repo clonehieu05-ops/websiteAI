@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <!-- Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
@@ -457,22 +459,31 @@
             <form id="loginForm" class="auth-form">
                 <div class="input-group">
                     <label>Email</label>
-                    <input type="email" id="loginEmail" required placeholder="your@email.com">
+                    <input type="email" id="loginEmail" required placeholder="your@gmail.com">
                 </div>
                 <div class="input-group">
                     <label>Password</label>
                     <input type="password" id="loginPassword" required placeholder="••••••••">
                 </div>
+                <div class="captcha-container">
+                    <div class="g-recaptcha" id="loginCaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                        data-theme="dark"></div>
+                </div>
                 <button type="submit" class="btn btn-primary btn-lg">Login</button>
             </form>
             <form id="registerForm" class="auth-form hidden">
                 <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="registerEmail" required placeholder="your@email.com">
+                    <label>Email <span class="email-notice">(@gmail.com only)</span></label>
+                    <input type="email" id="registerEmail" required placeholder="your@gmail.com"
+                        pattern=".+@gmail\.com$">
                 </div>
                 <div class="input-group">
                     <label>Password</label>
                     <input type="password" id="registerPassword" required minlength="6" placeholder="Min 6 characters">
+                </div>
+                <div class="captcha-container">
+                    <div class="g-recaptcha" id="registerCaptcha"
+                        data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-theme="dark"></div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
             </form>
