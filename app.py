@@ -515,7 +515,7 @@ def login():
     if not user or not check_password_hash(user['password_hash'], password):
         return jsonify({"error": "Invalid email or password"}), 401
     
-    access_token = create_access_token(identity=user['id'])
+    access_token = create_access_token(identity=str(user['id']))
     return jsonify({
         "token": access_token,
         "user": {
@@ -530,11 +530,15 @@ def login():
 @jwt_required()
 def get_current_user():
     """Get current user info."""
-    user_id = get_jwt_identity()
-    user = get_user_by_id(user_id)
-    
-    if not user:
-        return jsonify({"error": "User not found"}), 404
+    try:
+        user_id = get_jwt_identity()
+        print(f"DEBUG: /auth/me requested for user_id={user_id} (type: {type(user_id)})")
+        
+        user = get_user_by_id(user_id)
+        
+        if not user:
+            print(f"DEBUG: User {user_id} not found in DB")
+            return jsonify({"error": "User not found"}), 404
     
     # Get usage stats
     img_usage = get_user_usage(user_id, "image")
