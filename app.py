@@ -39,14 +39,16 @@ from gradio_client import Client, handle_file
 app = Flask(__name__, static_folder='static')
 CORS(app)
 
-# reCAPTCHA configuration (Google reCAPTCHA v2)
-# Get your keys at: https://www.google.com/recaptcha/admin
-RECAPTCHA_SITE_KEY = os.getenv('RECAPTCHA_SITE_KEY', '6LfIWD4sAAAAAAl15qeamLLcRvljmTvpbFPQfNU7')  
-RECAPTCHA_SECRET_KEY = os.getenv('RECAPTCHA_SECRET_KEY', '6LfIWD4sAAAAADacENsqVXIjJuYB3AYr4HBnzQJW') 
 
 # Configuration
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY', 'dev-secret-key-change-in-production')
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'jwt-secret-key-change-in-production')
+
+# reCAPTCHA configuration (Google reCAPTCHA v2)
+# Get your keys at: https://www.google.com/recaptcha/admin
+RECAPTCHA_SITE_KEY = os.getenv('RECAPTCHA_SITE_KEY', '6LfIWD4sAAAAAAl15qeamLLcRvljmTvpbFPQfNU7') 
+RECAPTCHA_SECRET_KEY = os.getenv('RECAPTCHA_SECRET_KEY', '6LfIWD4sAAAAADacENsqVXIjJuYB3AYr4HBnzQJW')
+
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50MB max upload
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -426,6 +428,7 @@ def generate_video_hf(prompt, api_key=None):
 def index():
     """Serve main page."""
     return send_from_directory('static', 'index.html')
+
 
 @app.route('/api/recaptcha-key', methods=['GET'])
 def get_recaptcha_key():
@@ -814,5 +817,3 @@ def download_file(filename):
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-
-
