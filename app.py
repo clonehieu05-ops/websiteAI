@@ -41,8 +41,8 @@ CORS(app)
 
 
 # Configuration
-app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY', 'dev-secret-key-change-in-production')
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'jwt-secret-key-change-in-production')
+app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY') or 'dev-secret-key-change-in-production'
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY') or 'jwt-secret-key-change-in-production'
 
 # reCAPTCHA configuration (Google reCAPTCHA v2)
 # Get your keys at: https://www.google.com/recaptcha/admin
